@@ -13,7 +13,6 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "students")
-
 public class StudentModel {
     @Id
     private String id;
