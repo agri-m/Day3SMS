@@ -1,39 +1,46 @@
 package com.example.day3sms.controller;
 
+import com.example.day3sms.dto.StudentRequestDTO;
+import com.example.day3sms.dto.StudentResponseDTO;
 import com.example.day3sms.model.StudentModel;
 import com.example.day3sms.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-
 @RestController
+@RequestMapping("/api")
 public class StudentController {
+
     private final StudentService service;
-    public StudentController(StudentService service){
-        this.service=service;
+
+    public StudentController(StudentService service) {
+        this.service = service;
     }
+
     @PostMapping("/add-student")
-    public StudentModel addStudent(@RequestBody StudentModel student){
+    public StudentResponseDTO addStudent(@Valid @RequestBody StudentRequestDTO student){
         return service.addStudent(student);
     }
-    //Display Students
+
     @GetMapping("/students")
-
-    public List<StudentModel> getStudents(){
-        return service.getStudents();
-    }
-
-    //
-    @PutMapping("/update/{id}")
-
-    public StudentModel updateStudent(@PathVariable String id, @RequestBody StudentModel student){
-        return service.updateStudent(id,student);
+    public List<StudentResponseDTO> getAllStudents(){
+        return service.getAllStudents();
     }
 
     @DeleteMapping("/delete/{id}")
-
-    public void deleteStudent(String id){
+    public String deleteStudent(@PathVariable String id){
         service.deleteStudent(id);
+        return "Student Deleted Successfully";
     }
+    @PutMapping("/update/{id}")
+    public StudentResponseDTO updateStudent(
+            @PathVariable String id,
+            @Valid @RequestBody StudentRequestDTO student) {
+
+        return service.updateStudent(id, student);
+    }
+
+
+
 }
