@@ -17,8 +17,8 @@ public class StudentService {
         this.repository = repository;
     }
 
-    //create
-    public StudentResponseDTO addStudent(StudentRequestDTO dto){
+    // CREATE
+    public StudentResponseDTO addStudent(StudentRequestDTO dto) {
 
         StudentModel student = new StudentModel();
         student.setName(dto.getName());
@@ -35,7 +35,7 @@ public class StudentService {
         );
     }
 
-    //Read
+    // READ
     public List<StudentResponseDTO> getAllStudents() {
         return repository.findAll()
                 .stream()
@@ -48,8 +48,7 @@ public class StudentService {
                 .toList();
     }
 
-
-    //Update
+    // UPDATE (PUT - full update)
     public StudentResponseDTO updateStudent(String id, StudentRequestDTO dto) {
 
         StudentModel existingStudent = repository.findById(id)
@@ -69,13 +68,36 @@ public class StudentService {
         );
     }
 
+    // PATCH (partial update)
+    public StudentResponseDTO patchStudent(String id, StudentRequestDTO dto) {
 
-    //Delete
+        StudentModel existingStudent = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        if (dto.getName() != null) {
+            existingStudent.setName(dto.getName());
+        }
+
+        if (dto.getAge() != null) {
+            existingStudent.setAge(dto.getAge());
+        }
+
+        if (dto.getEmail() != null) {
+            existingStudent.setEmail(dto.getEmail());
+        }
+
+        StudentModel updated = repository.save(existingStudent);
+
+        return new StudentResponseDTO(
+                updated.getId(),
+                updated.getName(),
+                updated.getAge(),
+                updated.getEmail()
+        );
+    }
+
+    // DELETE
     public void deleteStudent(String id) {
         repository.deleteById(id);
     }
-
-
-
-
 }

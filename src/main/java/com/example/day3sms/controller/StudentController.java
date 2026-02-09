@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class StudentController {
@@ -33,6 +34,7 @@ public class StudentController {
         service.deleteStudent(id);
         return "Student Deleted Successfully";
     }
+
     @PutMapping("/update/{id}")
     public StudentResponseDTO updateStudent(
             @PathVariable String id,
@@ -41,6 +43,13 @@ public class StudentController {
         return service.updateStudent(id, student);
     }
 
+    // ✅ PATCH – partial update
+    @PatchMapping("/patch/{id}")
+    public StudentResponseDTO patchStudent(
+            @PathVariable String id,
+            @RequestBody StudentRequestDTO student) {
 
+        return service.patchStudent(id, student);
+    }
 
 }
